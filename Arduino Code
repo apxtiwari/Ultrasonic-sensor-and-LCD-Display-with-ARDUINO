@@ -1,0 +1,47 @@
+//Industrial Automation(Food Manufacturing)
+//Project Code Written By -Anand Pratap Tiwari
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#include <LiquidCrystal.h>
+#define trig 18 //Defining Pin 18 as the trigger output 
+#define echo 19 //Defining Pin 19 as the echo output
+#define safe 13 //Definfing Pin 13 as the safe output
+
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2; //Liquid Crystal Display pins
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+float t=0,d=0;
+
+void setup()// Defining the state Of the Pins 
+{
+ lcd.begin(16,2);
+ pinMode(trig,OUTPUT); //Pin 18 as OUTPUT
+ pinMode(echo,INPUT); //Pin 19 as INPUT
+ pinMode(13,OUTPUT); //Pin 13 as OUTPUT
+}
+void loop() //Definfg the tasks to be executed in the loop 
+{
+  digitalWrite(trig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+  t = pulseIn(echo, HIGH);
+  d = t * 0.0340 / 2;
+  d = t * 0.01330 / 2;
+  if(d<=50){
+    digitalWrite(13,HIGH);
+    lcd.print("Leave");
+  }
+    else if (d >= 50) {
+      digitalWrite(13,LOW);
+      lcd.print("SAFE");
+  }
+  else{
+  lcd.setCursor(0, 0);
+  lcd.print("Distance: ");
+  lcd.print(d);
+  lcd.print(" cm");
+  delay(1000); 
+ }
+}
